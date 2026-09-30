@@ -4,6 +4,9 @@ import com.marquesdev.park_api.dto.PasswordRequestDto;
 import com.marquesdev.park_api.dto.UserRequestDto;
 import com.marquesdev.park_api.dto.UserResponseDto;
 import com.marquesdev.park_api.entity.User;
+import com.marquesdev.park_api.exception.EntityNotFoundException;
+import com.marquesdev.park_api.exception.PasswordInvalidException;
+import com.marquesdev.park_api.exception.UsernameUniqueException;
 import com.marquesdev.park_api.mapper.UserMapper;
 import com.marquesdev.park_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +26,18 @@ public class UserService {
     @Transactional
     public UserResponseDto saveUser(UserRequestDto userRequestDto) {
         User user = userMapper.toUser(userRequestDto);
-        User savedUser = userRepository.save(user);
-        return userMapper.toDto(savedUser);
+        try {
+            User savedUser = userRepository.saveAndFlush(user);
+            return userMapper.toDto(savedUser);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex){
+            throw new UsernameUniqueException("Username already exists.");
+        }
     }
 
     @Transactional(readOnly = true)
     public UserResponseDto getUserById(UUID id) {
         User user = userRepository.findById(id).
-                orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
         return userMapper.toDto(user);
     }
 
@@ -39,7 +46,7 @@ public class UserService {
         User existingUser = userRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         if (!passwordRequestDto.getNewPassword().equals(passwordRequestDto.getConfirmPassword())){
-            throw new RuntimeException("New password and confirmation password do not match.");
+            throw new PasswordInvalidException("New password and confirmation password do not match.");
         }
 
         if (!existingUser.getPassword().equals(passwordRequestDto.getCurrentPassword())){
