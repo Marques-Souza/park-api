@@ -44,13 +44,13 @@ public class UserService {
     @Transactional
     public UserResponseDto updatePassword(UUID id, PasswordRequestDto passwordRequestDto) {
         User existingUser = userRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                        .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
         if (!passwordRequestDto.getNewPassword().equals(passwordRequestDto.getConfirmPassword())){
             throw new PasswordInvalidException("New password and confirmation password do not match.");
         }
 
         if (!existingUser.getPassword().equals(passwordRequestDto.getCurrentPassword())){
-            throw new RuntimeException("Current password is incorrect.");
+            throw new PasswordInvalidException("Current password is incorrect.");
         }
 
         existingUser.setPassword(passwordRequestDto.getNewPassword());
