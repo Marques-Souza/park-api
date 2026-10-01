@@ -13,8 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto userRequestDto){
        UserResponseDto user = userService.saveUser(userRequestDto);
-       return ResponseEntity.ok(user);
+       return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
 
@@ -79,7 +79,7 @@ public class UserController {
     @Operation(summary = "Update password",
             description = "Update user password in the database.",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Password updated successfully",
+                    @ApiResponse(responseCode = "200", description = "Password updated successfully",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))),
                     @ApiResponse(responseCode = "400", description = "Password does not match",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
