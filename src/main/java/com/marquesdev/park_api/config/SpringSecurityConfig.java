@@ -1,6 +1,7 @@
 package com.marquesdev.park_api.config;
 
 
+import com.marquesdev.park_api.jwt.JwtAuthenticationEntryPoint;
 import com.marquesdev.park_api.jwt.JwtAuthorizationFilter;
 import com.marquesdev.park_api.jwt.JwtUserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebSecurity
 @EnableWebMvc
 @Configuration
+@EnableMethodSecurity
 public class SpringSecurityConfig {
 
     @Bean
@@ -36,8 +39,10 @@ public class SpringSecurityConfig {
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 ).addFilterBefore(
                        jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class
-                )
-                .build();
+                ).exceptionHandling(ex -> ex
+                                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+
+                ).build();
     }
 
     @Bean
