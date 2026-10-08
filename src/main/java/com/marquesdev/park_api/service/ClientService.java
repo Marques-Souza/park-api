@@ -10,9 +10,12 @@ import com.marquesdev.park_api.mapper.ClientMapper;
 import com.marquesdev.park_api.repository.ClientRepository;
 import com.marquesdev.park_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,10 +37,29 @@ public class ClientService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
         client.setUser(user);
 
-
         Client savedClient = clientRepository.save(client);
         return clientMapper.toDto(savedClient);
 
+
+    }
+
+    @Transactional(readOnly = true)
+    public ClientResponseDto getById(UUID id) {
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
+        return clientMapper.toDto(client);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ClientResponseDto> getAll(Pageable pageable) {
+        Page<Client> clients = clientRepository.findAll(pageable);
+        return clients.map(clientMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public ClientResponseDto getDetails(UUID id) {
+        Client client = clientRepository.findByUserId(id);
+        return clientMapper.toDto(client);
 
     }
 }

@@ -2,6 +2,7 @@ package com.marquesdev.park_api.controller;
 
 import com.marquesdev.park_api.dto.ClientRequestDto;
 import com.marquesdev.park_api.dto.ClientResponseDto;
+import com.marquesdev.park_api.entity.Client;
 import com.marquesdev.park_api.exception.ErrorMessage;
 import com.marquesdev.park_api.jwt.JwtUserDetails;
 import com.marquesdev.park_api.service.ClientService;
@@ -13,14 +14,16 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @Tag(name = "Clients", description = "Contains all operations related to client resources for creating.")
 @RestController
@@ -50,5 +53,28 @@ public class ClientController {
                                                           @AuthenticationPrincipal JwtUserDetails userDetails){
         ClientResponseDto client = clientService.saveClient(clientRequestDto, userDetails.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(client);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ClientResponseDto> getById(@PathVariable UUID id){
+        ClientResponseDto client = clientService.getById(id);
+        return ResponseEntity.ok(client);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ClientResponseDto>> getAll(Pageable pageable){
+        Pageable fixedPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                10);
+        Page<ClientResponseDto> clients = clientService.getAll(fixedPageable);
+        return ResponseEntity.ok(clients);
+    }
+
+
+    @GetMapping("/details")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ClientResponseDto> getDetails(@AuthenticationPrincipal JwtUserDetails userDetails){
+       ClientResponseDto client = clientService.getDetails(userDetails.getId());
+        return ResponseEntity.ok(client);
     }
 }
