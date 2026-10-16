@@ -41,8 +41,8 @@ public class UserIT {
     // Test credentials constants
     private final String ADMIN_USER = "supporte@gmail.com";
     private final String ADMIN_PASS = "123456";
-    private final String ATTENDANT_USER = "sergio@gmail.com";
-    private final String ATTENDANT_PASS = "123456";
+    private final String USER_USERNAME = "sergio@gmail.com";
+    private final String USER_PASSWORD = "123456";
 
 
     // ===========================================
@@ -150,7 +150,7 @@ public class UserIT {
         ErrorMessage responseBody = testClient
                 .get()
                 .uri(USERS_URI + "/" + ADMIN_ID)
-                .headers(JwtAuthentication.getHeaderAuthentication(testClient, ATTENDANT_USER, ATTENDANT_PASS))
+                .headers(JwtAuthentication.getHeaderAuthentication(testClient, USER_USERNAME, USER_PASSWORD))
                 .exchange()
                 .expectStatus().isEqualTo(403)
                 .expectBody(ErrorMessage.class)
@@ -193,7 +193,7 @@ public class UserIT {
         ErrorMessage responseBody = testClient
                 .get()
                 .uri(USERS_URI)
-                .headers(JwtAuthentication.getHeaderAuthentication(testClient, ATTENDANT_USER, ATTENDANT_PASS))
+                .headers(JwtAuthentication.getHeaderAuthentication(testClient, USER_USERNAME, USER_PASSWORD))
                 .exchange()
                 .expectStatus().isEqualTo(403)
                 .expectBody(ErrorMessage.class)
@@ -213,7 +213,7 @@ public class UserIT {
                 .patch()
                 .uri(USERS_URI + "/" + USER_ID + "/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .headers(JwtAuthentication.getHeaderAuthentication(testClient, ATTENDANT_USER, ATTENDANT_PASS))
+                .headers(JwtAuthentication.getHeaderAuthentication(testClient, USER_USERNAME, USER_PASSWORD))
                 .bodyValue(new PasswordRequestDto("123456", "654321", "654321"))
                 .exchange()
                 .expectStatus().isOk()
@@ -229,7 +229,7 @@ public class UserIT {
                 .patch()
                 .uri(USERS_URI + "/" + USER_ID + "/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .headers(JwtAuthentication.getHeaderAuthentication(testClient, ATTENDANT_USER, ATTENDANT_PASS))
+                .headers(JwtAuthentication.getHeaderAuthentication(testClient, USER_USERNAME, USER_PASSWORD))
                 .bodyValue(new PasswordRequestDto("000000", "654321", "654321"))
                 .exchange()
                 .expectStatus().isEqualTo(400)
@@ -246,7 +246,7 @@ public class UserIT {
                 .patch()
                 .uri(USERS_URI + "/" + USER_ID + "/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .headers(JwtAuthentication.getHeaderAuthentication(testClient, ATTENDANT_USER, ATTENDANT_PASS))
+                .headers(JwtAuthentication.getHeaderAuthentication(testClient, USER_USERNAME, USER_PASSWORD))
                 .bodyValue(new PasswordRequestDto("123456", "654321", "111111"))
                 .exchange()
                 .expectStatus().isEqualTo(400)
@@ -263,7 +263,7 @@ public class UserIT {
                 .patch()
                 .uri(USERS_URI + "/" + USER_ID + "/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .headers(JwtAuthentication.getHeaderAuthentication(testClient, ATTENDANT_USER, ATTENDANT_PASS))
+                .headers(JwtAuthentication.getHeaderAuthentication(testClient, USER_USERNAME, USER_PASSWORD))
                 .bodyValue(new PasswordRequestDto("", "", ""))
                 .exchange()
                 .expectStatus().isEqualTo(422)
@@ -309,7 +309,7 @@ public class UserIT {
                 .patch()
                 .uri(USERS_URI + "/" + ADMIN_ID + "/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .headers(JwtAuthentication.getHeaderAuthentication(testClient, ATTENDANT_USER, ATTENDANT_PASS))
+                .headers(JwtAuthentication.getHeaderAuthentication(testClient, USER_USERNAME, USER_PASSWORD))
                 .bodyValue(new PasswordRequestDto("123456", "654321", "654321"))
                 .exchange()
                 .expectStatus().isEqualTo(403)
@@ -321,4 +321,3 @@ public class UserIT {
     }
 
 }
-

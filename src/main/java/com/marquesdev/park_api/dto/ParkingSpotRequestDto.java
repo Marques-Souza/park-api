@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VagaRequestDto {
+public class ParkingSpotRequestDto {
 
     @NotBlank(message = "Código da vaga cannot be null")
     @Size(min = 4, max = 4, message = "Código da vaga must be 4 characters")

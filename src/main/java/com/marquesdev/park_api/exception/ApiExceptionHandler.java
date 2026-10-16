@@ -1,9 +1,5 @@
 package com.marquesdev.park_api.exception;
 
-import com.marquesdev.park_api.exception.CpfViolationException;
-import com.marquesdev.park_api.exception.EntityNotFoundException;
-import com.marquesdev.park_api.exception.PasswordInvalidException;
-import com.marquesdev.park_api.exception.UsernameUniqueException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,7 +25,7 @@ public class ApiExceptionHandler {
                 .body(new ErrorMessage(request, HttpStatus.FORBIDDEN, ex.getMessage()));
 
     }
-    @ExceptionHandler({UsernameUniqueException.class, CpfViolationException.class, VagaViolationException.class} )
+    @ExceptionHandler({UsernameUniqueException.class, CpfViolationException.class, ParkingSpotViolationException.class} )
     public ResponseEntity<ErrorMessage> usernameUniqueException(RuntimeException ex,
                                                                         HttpServletRequest request){
         log.error("Api Error", ex);

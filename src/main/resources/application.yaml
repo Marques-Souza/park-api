@@ -35,6 +35,5 @@ app:
     endpoints:
       users: /api/v1/users
       clients: /api/v1/clients
-      vagas: /api/v1/vagas
-
+      parking-spots: /api/v1/parking-spots
 

@@ -18,13 +18,13 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "vagas")
+@Table(name = "parking_spots")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Vaga implements Serializable {
+public class ParkingSpot implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -57,8 +57,8 @@ public class Vaga implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Vaga vaga = (Vaga) o;
-        return Objects.equals(id, vaga.id);
+        ParkingSpot parkingSpot = (ParkingSpot) o;
+        return Objects.equals(id, parkingSpot.id);
     }
 
     @Override
