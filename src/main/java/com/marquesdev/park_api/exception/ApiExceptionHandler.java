@@ -29,7 +29,7 @@ public class ApiExceptionHandler {
                 .body(new ErrorMessage(request, HttpStatus.FORBIDDEN, ex.getMessage()));
 
     }
-    @ExceptionHandler({UsernameUniqueException.class, CpfViolationException.class} )
+    @ExceptionHandler({UsernameUniqueException.class, CpfViolationException.class, VagaViolationException.class} )
     public ResponseEntity<ErrorMessage> usernameUniqueException(RuntimeException ex,
                                                                         HttpServletRequest request){
         log.error("Api Error", ex);
