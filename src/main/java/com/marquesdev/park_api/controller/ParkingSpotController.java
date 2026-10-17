@@ -45,8 +45,8 @@ public class ParkingSpotController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ParkingSpotResponseDto> saveParkingSpot(@Valid @RequestBody ParkingSpotRequestDto parkingSpotRequestDto){
-        ParkingSpotResponseDto ParkingSpot = parkingSpotService.saveParkingSpot(parkingSpotRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ParkingSpot);
+        ParkingSpotResponseDto parkingSpot = parkingSpotService.saveParkingSpot(parkingSpotRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(parkingSpot);
     }
 
     @Operation(summary = "Retrieve a parking spot by code",
@@ -65,7 +65,7 @@ public class ParkingSpotController {
     public ResponseEntity<ParkingSpotResponseDto> findByCode(
             @Parameter(description = "Four-character parking spot code", example = "A001")
             @PathVariable String code){
-        ParkingSpotResponseDto ParkingSpot = parkingSpotService.findByCode(code);
-        return ResponseEntity.ok(ParkingSpot);
+        ParkingSpotResponseDto parkingSpot = parkingSpotService.findByCode(code);
+        return ResponseEntity.ok(parkingSpot);
     }
 }

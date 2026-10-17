@@ -1,6 +1,6 @@
 package com.marquesdev.park_api.entity;
 
-import com.marquesdev.park_api.enums.StatusVagas;
+import com.marquesdev.park_api.enums.StatusParkingSpot;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,7 +35,7 @@ public class ParkingSpot implements Serializable {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusVagas status;
+    private StatusParkingSpot status;
 
     @CreatedDate
     @Column(name = "created_at")

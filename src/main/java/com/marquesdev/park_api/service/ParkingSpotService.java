@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.marquesdev.park_api.enums.StatusParkingSpot.FREE;
+
 @Service
 @RequiredArgsConstructor
 public class ParkingSpotService {
@@ -33,5 +35,11 @@ public class ParkingSpotService {
         ParkingSpot parkingSpot = parkingSpotRepository.findByCode(code)
                 .orElseThrow(() -> new EntityNotFoundException("ParkingSpot not found"));
         return parkingSpotMapper.toDto(parkingSpot);
+    }
+
+    @Transactional(readOnly = true)
+    public ParkingSpot findParkingSpotFree() {
+        return parkingSpotRepository.findFirstByStatus(FREE)
+                .orElseThrow(() -> new EntityNotFoundException("No free parking spot available"));
     }
 }
