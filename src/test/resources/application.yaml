@@ -13,3 +13,5 @@ app:
       users: /api/v1/users
       clients: /api/v1/clients
       parking-spots: /api/v1/parking-spots
+      client-parking-spots: /api/v1/client-parking-spots
+      parkings: /api/v1/parkings
