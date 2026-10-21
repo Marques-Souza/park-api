@@ -22,13 +22,12 @@ spring:
     hibernate:
       ddl-auto: update
 
-  ## Springdoc OpenAPI Swagger configuration
-  springdoc:
-    swagger-ui:
-      path: /docs-park.html
-    api-docs:
-      path: /docs-park
-    packages-to-scan: com.marquesdev.controller
+springdoc:
+  swagger-ui:
+    path: /docs-park.html
+  api-docs:
+    path: /docs-park
+  packages-to-scan: com.marquesdev.park_api.controller
 
 
 ## API Endpoint configuration
