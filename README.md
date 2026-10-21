@@ -109,6 +109,12 @@ docker compose down
 
 O Compose configura um banco chamado `park`, com usuário e senha `postgres`. As credenciais e o segredo JWT definidos no arquivo são para desenvolvimento local; troque esses valores antes de usar a aplicação em qualquer ambiente compartilhado ou de produção.
 
+## Publicando no Render
+
+No painel do Render, crie um **Web Service** conectado ao repositório. Selecione Docker como runtime para usar o `Dockerfile` da raiz. Crie também um PostgreSQL e configure no serviço as variáveis `DB_URL` (use a Internal Database URL do banco), `DB_USERNAME`, `DB_PASSWORD` e `JWT_SECRET` (um segredo longo e aleatório). A aplicação usa automaticamente a porta e a URL pública fornecidas pelo Render.
+
+O plano gratuito do PostgreSQL no Render pode ter limitações de disponibilidade e retenção. Para dados persistentes de produção, escolha um plano adequado no painel do Render.
+
 ## Executando sem Docker
 
 Você vai precisar de Java 21 e de um PostgreSQL em execução. Crie um banco chamado `park` e configure as variáveis no terminal antes de iniciar a aplicação. No PowerShell:
