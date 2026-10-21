@@ -5,6 +5,8 @@ import com.marquesdev.park_api.dto.ParkingResponseDto;
 import com.marquesdev.park_api.exception.ErrorMessage;
 import com.marquesdev.park_api.jwt.JwtUserDetails;
 import com.marquesdev.park_api.service.ClientParkingSpotService;
+import com.marquesdev.park_api.service.ClientService;
+import com.marquesdev.park_api.service.ParkingReportService;
 import com.marquesdev.park_api.service.ParkingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,6 +15,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,10 +24,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 
 @RestController
@@ -34,6 +41,8 @@ public class ParkingController {
 
     private final ParkingService parkingService;
     private final ClientParkingSpotService clientParkingSpotService;
+    private final ClientService clientService;
+    private final ParkingReportService parkingReportService;
 
     @Operation(summary = "Check in a vehicle",
             description = "Starts a parking session using the first available parking spot. Requires authentication with the ADMIN role.",
@@ -148,5 +157,19 @@ public class ParkingController {
         Page<ParkingResponseDto> parkings =
                 clientParkingSpotService.getAllByClientUserId(userDetails.getId(), pageable);
         return ResponseEntity.ok(parkings);
+    }
+
+    @GetMapping("/report")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Void> getReport(HttpServletResponse response, @AuthenticationPrincipal JwtUserDetails user) throws IOException {
+        String cpf = clientService.findByUserId(user.getId()).getCpf();
+        byte[] bytes = parkingReportService.generateReport(cpf);
+
+        response.setContentType(MediaType.APPLICATION_PDF_VALUE);
+        response.setHeader("Content-disposition", "inline; filename=" + System.currentTimeMillis() + ".pdf");
+        response.getOutputStream().write(bytes);
+
+        return ResponseEntity.ok().build();
+
     }
 }

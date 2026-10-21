@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface ClientRepository extends JpaRepository<Client, UUID> {
     boolean existsByCpf(String cpf);
 
-    Client findByUserId(UUID id);
+    Optional<Client> findByUserId(UUID id);
 
     Optional<Client> findByCpf(String cpf);
 }

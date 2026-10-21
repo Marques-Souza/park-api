@@ -18,7 +18,7 @@ public class JwtUtils {
 
     public static final String JWT_BEARER = "Bearer ";
     public static final String JWT_AUTHORIZATION = "Authorization";
-    public static final String SECRET_KEY = "0123456789-0123456789-0123456789";
+    public static final String DEFAULT_SECRET_KEY = "0123456789-0123456789-0123456789";
     public static final long EXPIRE_DAYS = 0;
     public static final long EXPIRE_HOURS = 0;
     public static final long EXPIRE_MINUTES = 30;
@@ -27,8 +27,13 @@ public class JwtUtils {
 
     }
 
+    private static String getSecretKey() {
+        String secret = System.getenv("JWT_SECRET");
+        return secret != null && !secret.isEmpty() ? secret : DEFAULT_SECRET_KEY;
+    }
+
     private static Key generateKey() {
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(getSecretKey().getBytes(StandardCharsets.UTF_8));
     }
 
     private static Date toExpireDate(Date start) {

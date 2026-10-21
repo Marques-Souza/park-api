@@ -58,14 +58,21 @@ public class ClientService {
 
     @Transactional(readOnly = true)
     public ClientResponseDto getDetails(UUID id) {
-        Client client = clientRepository.findByUserId(id);
+        Client client = findByUserId(id);
         return clientMapper.toDto(client);
-
     }
+
 
     @Transactional(readOnly = true)
     public Client findByCpf(String cpf) {
         return clientRepository.findByCpf(cpf)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Client not found with cpf: " + cpf)));
     }
+
+    @Transactional(readOnly = true)
+    public Client findByUserId(UUID id) {
+        return clientRepository.findByUserId(id)
+                .orElseThrow(() -> new EntityNotFoundException("Client not found with user id: " + id));
+    }
+
 }
