@@ -1,3 +1,4 @@
+[![Park API CI](https://github.com/Marques-Souza/park-api/actions/workflows/ci.yml/badge.svg)](https://github.com/Marques-Souza/park-api/actions/workflows/ci.yml)
 # Park API
 
 Esse projeto é uma API REST para organizar a rotina de um estacionamento. Com ela dá para cadastrar clientes e vagas, registrar a entrada e a saída dos veículos, consultar o histórico de permanências e gerar um relatório em PDF.
